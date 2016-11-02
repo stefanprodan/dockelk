@@ -9,6 +9,9 @@ services:
       - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    networks:
+      default:
+        ipv4_address: 192.16.0.39
 
   logstash:
     build: logstash/
@@ -31,7 +34,7 @@ services:
     ports:
       - "5601:5601"
     environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_URL=http://192.16.0.39:9200
 
 
 networks:
