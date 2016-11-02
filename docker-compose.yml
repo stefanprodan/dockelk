@@ -3,6 +3,7 @@ version: '2'
 services:
   elasticsearch:
     build: elasticsearch/
+    container_name: elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -11,6 +12,7 @@ services:
 
   logstash:
     build: logstash/
+    container_name: logstash
     command: -f /etc/logstash/conf.d/
     volumes:
       - ./logstash/config:/etc/logstash/conf.d
@@ -23,6 +25,7 @@ services:
 
   kibana:
     build: kibana/
+    container_name: kibana
     volumes:
       - ./kibana/config/:/opt/kibana/config/
     ports:
