@@ -30,10 +30,6 @@ services:
       - ./kibana/config/:/opt/kibana/config/
     ports:
       - "5601:5601"
-    logging:
-      driver: gelf
-      options:
-        gelf-address: udp://192.16.0.38:12201
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
 
