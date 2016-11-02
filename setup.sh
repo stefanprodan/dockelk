@@ -7,7 +7,7 @@ network="elk"
 
 # create network
 if [ ! "$(docker network ls --filter name=$network -q)" ];then
-    docker network create $network
+    docker network create --subnet=192.16.0.0/24 $network
 fi
 
 docker-compose pull

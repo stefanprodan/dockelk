@@ -8,8 +8,6 @@ services:
       - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
-    networks:
-      - elk
 
   logstash:
     build: logstash/
@@ -20,7 +18,8 @@ services:
       - "12201:12201"
       - "12201:12201/udp"
     networks:
-      - elk
+      default:
+        ipv4_address: 192.16.0.38
 
   kibana:
     build: kibana/
@@ -28,8 +27,16 @@ services:
       - ./kibana/config/:/opt/kibana/config/
     ports:
       - "5601:5601"
-    networks:
-      - elk
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://192.16.0.38:12201
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+
+
+networks:
+  default:
+    external:
+      name: elk
 
