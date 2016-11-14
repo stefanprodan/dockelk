@@ -14,7 +14,7 @@ services:
       default:
         ipv4_address: 192.16.0.39
 
-  logstash:
+  redis:
     build: redis/
     container_name: redis
     volumes:
@@ -25,7 +25,7 @@ services:
       default:
         ipv4_address: 192.16.0.37
 
-  logstash:
+  logstash-shipper:
     build: logstash-shipper/
     container_name: logstash-shipper
     command: -f /etc/logstash/conf.d/
@@ -38,7 +38,7 @@ services:
       default:
         ipv4_address: 192.16.0.38
 
-  logstash:
+  logstash-indexer:
     build: logstash-indexer/
     container_name: logstash-shipper
     command: -f /etc/logstash/conf.d/
