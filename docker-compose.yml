@@ -31,9 +31,6 @@ services:
     command: -f /etc/logstash/conf.d/
     volumes:
       - ./logstash-shipper/config:/etc/logstash/conf.d
-    ports:
-      - "12201:12201"
-      - "12201:12201/udp"
     networks:
       default:
         ipv4_address: 192.16.0.38
