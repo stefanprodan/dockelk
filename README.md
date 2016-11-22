@@ -1,4 +1,4 @@
-# dockelk
+# ELK v2.4
 Docker logging stack: 
  - ElasticSearch 
  - Logstash Indexer
