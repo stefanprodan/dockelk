@@ -9,4 +9,4 @@ Docker logging stack:
 
 Flow:
 
-container -> docker engine -> logstash shipper -> redis -> logstash indexer -> elasticsearch -> kibana
+container -> docker gelf -> logstash shipper -> redis -> logstash indexer -> elasticsearch -> kibana
