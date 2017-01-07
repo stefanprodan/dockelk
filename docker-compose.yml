@@ -12,6 +12,7 @@ services:
       ES_JAVA_OPTS: "-Xmx2g"
       ES_HEAP_SIZE: "1g"
     command: >
+        elasticsearch \
         -Des.node.name="node1" \
         -Des.cluster.name="elk" \
         -Des.network.host=0.0.0.0 \
@@ -33,6 +34,7 @@ services:
       ES_JAVA_OPTS: "-Xmx2g"
       ES_HEAP_SIZE: "1g"
     command: >
+        elasticsearch \
         -Des.node.name="node2" \
         -Des.cluster.name="elk" \
         -Des.network.host=0.0.0.0 \
@@ -54,6 +56,7 @@ services:
       ES_JAVA_OPTS: "-Xmx2g"
       ES_HEAP_SIZE: "1g"
     command: >
+        elasticsearch \
         -Des.node.name="node3" \
         -Des.cluster.name="elk" \
         -Des.network.host=0.0.0.0 \
@@ -72,6 +75,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     command: >
+        elasticsearch \
         -Des.node.name="lb" \
         -Des.cluster.name="elk" \
         -Des.network.host=0.0.0.0 \
