@@ -12,13 +12,13 @@ services:
       ES_JAVA_OPTS: "-Xmx2g"
       ES_HEAP_SIZE: "1g"
     command: >
-        elasticsearch \
-        --node.name="node1" \
-        --cluster.name="elk" \
-        --network.host=0.0.0.0 \
-        --discovery.zen.ping.multicast.enabled=false \
-        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
-        --node.data=true \
+        elasticsearch 
+        --node.name="node1" 
+        --cluster.name="elk" 
+        --network.host=0.0.0.0 
+        --discovery.zen.ping.multicast.enabled=false 
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" 
+        --node.data=true 
         --bootstrap.mlockall=true 
     networks:
       default:
@@ -34,13 +34,13 @@ services:
       ES_JAVA_OPTS: "-Xmx2g"
       ES_HEAP_SIZE: "1g"
     command: >
-        elasticsearch \
-        --node.name="node2" \
-        --cluster.name="elk" \
-        --network.host=0.0.0.0 \
-        --discovery.zen.ping.multicast.enabled=false \
-        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
-        --node.data=true \
+        elasticsearch 
+        --node.name="node2" 
+        --cluster.name="elk" 
+        --network.host=0.0.0.0 
+        --discovery.zen.ping.multicast.enabled=false 
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" 
+        --node.data=true 
         --bootstrap.mlockall=true 
     networks:
       default:
@@ -56,13 +56,13 @@ services:
       ES_JAVA_OPTS: "-Xmx2g"
       ES_HEAP_SIZE: "1g"
     command: >
-        elasticsearch \
-        --node.name="node3" \
-        --cluster.name="elk" \
-        --network.host=0.0.0.0 \
-        --discovery.zen.ping.multicast.enabled=false \
-        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
-        --node.data=true \
+        elasticsearch 
+        --node.name="node3" 
+        --cluster.name="elk" 
+        --network.host=0.0.0.0 
+        --discovery.zen.ping.multicast.enabled=false 
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" 
+        --node.data=true 
         --bootstrap.mlockall=true 
     networks:
       default:
@@ -75,15 +75,15 @@ services:
       - "9200:9200"
       - "9300:9300"
     command: >
-        elasticsearch \
-        --node.name="lb" \
-        --cluster.name="elk" \
-        --network.host=0.0.0.0 \
-        --discovery.zen.ping.multicast.enabled=false \
-        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
-        --node.master=false \
-        --node.data=false \
-        --node.ingest=true \
+        elasticsearch 
+        --node.name="lb" 
+        --cluster.name="elk" 
+        --network.host=0.0.0.0 
+        --discovery.zen.ping.multicast.enabled=false 
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" 
+        --node.master=false 
+        --node.data=false 
+        --node.ingest=true 
         --bootstrap.mlockall=true 
     networks:
       default:
