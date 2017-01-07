@@ -8,7 +8,8 @@ services:
     mem_limit: 2g
     memswap_limit: 2g
     mem_swappiness: 0
-    cap_add: IPC_LOCK
+    cap_add: 
+      - IPC_LOCK
     environment:
       ES_JAVA_OPTS: "-Xmx2g"
       ES_HEAP_SIZE: "1g"
