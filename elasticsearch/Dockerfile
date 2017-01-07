@@ -1,4 +1,4 @@
-FROM elasticsearch:2.4.1
+FROM elasticsearch:2.4.3
 
 RUN /usr/share/elasticsearch/bin/plugin install --batch royrusso/elasticsearch-HQ
 RUN /usr/share/elasticsearch/bin/plugin install --batch lmenezes/elasticsearch-kopf
@@ -8,4 +8,4 @@ RUN chmod +x /usr/local/bin/docker-healthcheck
 
 HEALTHCHECK CMD ["docker-healthcheck"]
 
-COPY config/elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
+COPY config /usr/share/elasticsearch/config
