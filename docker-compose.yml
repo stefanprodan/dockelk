@@ -68,12 +68,12 @@ services:
       default:
         ipv4_address: 192.16.0.13
 
-  elasticsearch-ingest:
+  elasticsearch-ingester:
     build: elasticsearch/
-    container_name: elasticsearch-ingest
+    container_name: elasticsearch-ingester
     command: >
         elasticsearch 
-        --node.name="ingest" 
+        --node.name="ingester" 
         --cluster.name="elk" 
         --network.host=0.0.0.0 
         --discovery.zen.ping.multicast.enabled=false 
