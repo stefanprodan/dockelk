@@ -13,13 +13,13 @@ services:
       ES_HEAP_SIZE: "1g"
     command: >
         elasticsearch \
-        -Des.node.name="node1" \
-        -Des.cluster.name="elk" \
-        -Des.network.host=0.0.0.0 \
-        -Des.discovery.zen.ping.multicast.enabled=false \
-        -Des.discovery.zen.ping.unicast.hosts="192.16.0.11" \
-        -Des.node.data=true \
-        -Des.bootstrap.mlockall=true 
+        --node.name="node1" \
+        --cluster.name="elk" \
+        --network.host=0.0.0.0 \
+        --discovery.zen.ping.multicast.enabled=false \
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
+        --node.data=true \
+        --bootstrap.mlockall=true 
     networks:
       default:
         ipv4_address: 192.16.0.11
@@ -35,13 +35,13 @@ services:
       ES_HEAP_SIZE: "1g"
     command: >
         elasticsearch \
-        -Des.node.name="node2" \
-        -Des.cluster.name="elk" \
-        -Des.network.host=0.0.0.0 \
-        -Des.discovery.zen.ping.multicast.enabled=false \
-        -Des.discovery.zen.ping.unicast.hosts="192.16.0.11" \
-        -Des.node.data=true \
-        -Des.bootstrap.mlockall=true 
+        --node.name="node2" \
+        --cluster.name="elk" \
+        --network.host=0.0.0.0 \
+        --discovery.zen.ping.multicast.enabled=false \
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
+        --node.data=true \
+        --bootstrap.mlockall=true 
     networks:
       default:
         ipv4_address: 192.16.0.12
@@ -57,13 +57,13 @@ services:
       ES_HEAP_SIZE: "1g"
     command: >
         elasticsearch \
-        -Des.node.name="node3" \
-        -Des.cluster.name="elk" \
-        -Des.network.host=0.0.0.0 \
-        -Des.discovery.zen.ping.multicast.enabled=false \
-        -Des.discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
-        -Des.node.data=true \
-        -Des.bootstrap.mlockall=true 
+        --node.name="node3" \
+        --cluster.name="elk" \
+        --network.host=0.0.0.0 \
+        --discovery.zen.ping.multicast.enabled=false \
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
+        --node.data=true \
+        --bootstrap.mlockall=true 
     networks:
       default:
         ipv4_address: 192.16.0.13
@@ -76,15 +76,15 @@ services:
       - "9300:9300"
     command: >
         elasticsearch \
-        -Des.node.name="lb" \
-        -Des.cluster.name="elk" \
-        -Des.network.host=0.0.0.0 \
-        -Des.discovery.zen.ping.multicast.enabled=false \
-        -Des.discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
-        -Des.node.master=false \
-        -Des.node.data=false \
-        -Des.node.ingest=true \
-        -Des.bootstrap.mlockall=true 
+        --node.name="lb" \
+        --cluster.name="elk" \
+        --network.host=0.0.0.0 \
+        --discovery.zen.ping.multicast.enabled=false \
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
+        --node.master=false \
+        --node.data=false \
+        --node.ingest=true \
+        --bootstrap.mlockall=true 
     networks:
       default:
         ipv4_address: 192.16.0.39
