@@ -29,8 +29,6 @@ services:
     build: logstash-shipper/
     container_name: logstash-shipper
     command: -f /etc/logstash/conf.d/
-    volumes:
-      - ./logstash-shipper/config:/etc/logstash/conf.d
     ports:
       - "12201:12201"
       - "12201:12201/udp"
@@ -42,8 +40,6 @@ services:
     build: logstash-indexer/
     container_name: logstash-indexer
     command: -f /etc/logstash/conf.d/
-    volumes:
-      - ./logstash-indexer/config:/etc/logstash/conf.d
     networks:
       default:
         ipv4_address: 192.16.0.36
@@ -51,8 +47,6 @@ services:
   kibana:
     build: kibana/
     container_name: kibana
-    volumes:
-      - ./kibana/config/:/opt/kibana/config/
     ports:
       - "5601:5601"
     environment:
