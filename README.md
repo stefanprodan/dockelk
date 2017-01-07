@@ -1,6 +1,8 @@
 # ELK v2.4
 Docker logging stack: 
- - ElasticSearch 
+ - ElasticSearch Cluster (3x data nodes)
+ - ElasticSearch Ingester node (used by Logstash indexer)
+ - ElasticSearch Coordinator node (used by Kibana)
  - Logstash Indexer
  - Redis Broker
  - Logstash Shipper
@@ -9,4 +11,4 @@ Docker logging stack:
 
 Flow:
 
-container -> docker gelf -> logstash shipper -> redis -> logstash indexer -> elasticsearch -> kibana
+container -> docker gelf -> logstash shipper -> redis broker -> logstash indexer -> elasticsearch ingester -> elasticsearch data cluster -> elasticsearch coordinator -> kibana
