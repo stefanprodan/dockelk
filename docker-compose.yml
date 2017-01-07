@@ -32,6 +32,11 @@ services:
   elasticsearch-node2:
     build: elasticsearch/
     container_name: elasticsearch-node2
+    mem_limit: 2g
+    memswap_limit: 2g
+    mem_swappiness: 0
+    cap_add: 
+      - IPC_LOCK
     environment:
       ES_JAVA_OPTS: "-Xmx2g"
       ES_HEAP_SIZE: "1g"
@@ -54,6 +59,11 @@ services:
   elasticsearch-node3:
     build: elasticsearch/
     container_name: elasticsearch-node3
+    mem_limit: 2g
+    memswap_limit: 2g
+    mem_swappiness: 0
+    cap_add: 
+      - IPC_LOCK
     environment:
       ES_JAVA_OPTS: "-Xmx2g"
       ES_HEAP_SIZE: "1g"
@@ -76,6 +86,11 @@ services:
   elasticsearch-ingester:
     build: elasticsearch/
     container_name: elasticsearch-ingester
+    mem_limit: 2g
+    memswap_limit: 2g
+    mem_swappiness: 0
+    cap_add: 
+      - IPC_LOCK
     command: >
         elasticsearch 
         --node.name="ingester" 
@@ -97,6 +112,11 @@ services:
   elasticsearch-coordinator:
     build: elasticsearch/
     container_name: elasticsearch-coordinator 
+    mem_limit: 2g
+    memswap_limit: 2g
+    mem_swappiness: 0
+    cap_add: 
+      - IPC_LOCK
     command: >
         elasticsearch 
         --node.name="coordinator"
