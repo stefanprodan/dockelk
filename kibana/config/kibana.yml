@@ -18,7 +18,7 @@
 #server.name: "your-hostname"
 
 # The URL of the Elasticsearch instance to use for all your queries.
-elasticsearch.url: "http://192.16.0.39:9200"
+elasticsearch.url: "http://192.16.0.22:9200"
 
 # When this setting's value is true Kibana uses the hostname specified in the server.host
 # setting. When the value of this setting is false, Kibana uses the hostname of the host

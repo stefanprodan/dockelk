@@ -68,26 +68,47 @@ services:
       default:
         ipv4_address: 192.16.0.13
 
-  elasticsearch-lb:
+  elasticsearch-ingest:
     build: elasticsearch/
-    container_name: elasticsearch-lb
+    container_name: elasticsearch-ingest
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "9221:9200"
+      - "9321:9300"
     command: >
         elasticsearch 
-        --node.name="lb" 
+        --node.name="ingest" 
         --cluster.name="elk" 
         --network.host=0.0.0.0 
         --discovery.zen.ping.multicast.enabled=false 
-        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" 
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.21" 
         --node.master=false 
         --node.data=false 
         --node.ingest=true 
         --bootstrap.mlockall=true 
     networks:
       default:
-        ipv4_address: 192.16.0.39
+        ipv4_address: 192.16.0.21
+
+  elasticsearch-coordinator:
+    build: elasticsearch/
+    container_name: elasticsearch-coordinator 
+    ports:
+      - "9222:9200"
+      - "9322:9300"
+    command: >
+        elasticsearch 
+        --node.name="coordinator"
+        --cluster.name="elk" 
+        --network.host=0.0.0.0 
+        --discovery.zen.ping.multicast.enabled=false 
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" 
+        --node.master=false 
+        --node.data=false 
+        --node.ingest=false 
+        --bootstrap.mlockall=true 
+    networks:
+      default:
+        ipv4_address: 192.16.0.22
 
   redis:
     build: redis/
