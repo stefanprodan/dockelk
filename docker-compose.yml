@@ -49,8 +49,6 @@ services:
     container_name: kibana
     ports:
       - "5601:5601"
-    environment:
-      - ELASTICSEARCH_URL=http://192.16.0.39:9200
 
 
 networks:
