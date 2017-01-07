@@ -1,5 +1,8 @@
 FROM elasticsearch:2.4.1
 
+RUN /usr/share/elasticsearch/bin/plugin install --batch royrusso/elasticsearch-HQ
+RUN /usr/share/elasticsearch/bin/plugin install --batch lmenezes/elasticsearch-kopf
+
 ENV ES_JAVA_OPTS="-Des.path.conf=/etc/elasticsearch"
 
 COPY docker-healthcheck /usr/local/bin/
