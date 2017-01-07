@@ -80,7 +80,7 @@ services:
         --cluster.name="elk" 
         --network.host=0.0.0.0 
         --discovery.zen.ping.multicast.enabled=false 
-        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.21" 
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" 
         --node.master=false 
         --node.data=false 
         --node.ingest=true 
