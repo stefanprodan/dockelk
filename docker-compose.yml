@@ -2,14 +2,85 @@ version: '2'
 
 services:
 
-  elasticsearch:
+  elasticsearch-node1:
     build: elasticsearch/
-    container_name: elasticsearch
+    container_name: elasticsearch-node1
+    ports:
+      - "9201:9200"
+      - "9301:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx2g"
+      ES_HEAP_SIZE: "1g"
+    command: >
+        -Des.node.name="node1" \
+        -Des.cluster.name="elk" \
+        -Des.network.host=0.0.0.0 \
+        -Des.discovery.zen.ping.multicast.enabled=false \
+        -Des.discovery.zen.ping.unicast.hosts="192.16.0.11" \
+        -Des.node.data=true \
+        -Des.bootstrap.mlockall=true 
+    networks:
+      default:
+        ipv4_address: 192.16.0.11
+
+  elasticsearch-node2:
+    build: elasticsearch/
+    container_name: elasticsearch-node2
+    ports:
+      - "9202:9200"
+      - "9302:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx2g"
+      ES_HEAP_SIZE: "1g"
+    command: >
+        -Des.node.name="node2" \
+        -Des.cluster.name="elk" \
+        -Des.network.host=0.0.0.0 \
+        -Des.discovery.zen.ping.multicast.enabled=false \
+        -Des.discovery.zen.ping.unicast.hosts="192.16.0.11" \
+        -Des.node.data=true \
+        -Des.bootstrap.mlockall=true 
+    networks:
+      default:
+        ipv4_address: 192.16.0.12
+
+  elasticsearch-node3:
+    build: elasticsearch/
+    container_name: elasticsearch-node3
+    ports:
+      - "9203:9200"
+      - "9303:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx2g"
+      ES_HEAP_SIZE: "1g"
+    command: >
+        -Des.node.name="node3" \
+        -Des.cluster.name="elk" \
+        -Des.network.host=0.0.0.0 \
+        -Des.discovery.zen.ping.multicast.enabled=false \
+        -Des.discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
+        -Des.node.data=true \
+        -Des.bootstrap.mlockall=true 
+    networks:
+      default:
+        ipv4_address: 192.16.0.13
+
+  elasticsearch-lb:
+    build: elasticsearch/
+    container_name: elasticsearch-lb
     ports:
       - "9200:9200"
       - "9300:9300"
-    environment:
-      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    command: >
+        -Des.node.name="lb" \
+        -Des.cluster.name="elk" \
+        -Des.network.host=0.0.0.0 \
+        -Des.discovery.zen.ping.multicast.enabled=false \
+        -Des.discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" \
+        -Des.node.master=false \
+        -Des.node.data=false \
+        -Des.node.ingest=true \
+        -Des.bootstrap.mlockall=true 
     networks:
       default:
         ipv4_address: 192.16.0.39
