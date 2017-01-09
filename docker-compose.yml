@@ -160,6 +160,7 @@ services:
       driver: gelf
       options:
         gelf-address: "udp://192.16.0.30:12201"
+        tag: "nginx"
 
 
 networks:
