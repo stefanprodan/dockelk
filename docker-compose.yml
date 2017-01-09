@@ -28,6 +28,7 @@ services:
     networks:
       default:
         ipv4_address: 192.16.0.11
+    restart: unless-stopped
 
   elasticsearch-node2:
     build: elasticsearch/
@@ -55,6 +56,7 @@ services:
     networks:
       default:
         ipv4_address: 192.16.0.12
+    restart: unless-stopped
 
   elasticsearch-node3:
     build: elasticsearch/
@@ -82,6 +84,7 @@ services:
     networks:
       default:
         ipv4_address: 192.16.0.13
+    restart: unless-stopped
 
   elasticsearch-ingester:
     build: elasticsearch/
@@ -108,6 +111,7 @@ services:
     networks:
       default:
         ipv4_address: 192.16.0.21
+    restart: unless-stopped
 
   elasticsearch-coordinator:
     build: elasticsearch/
@@ -143,6 +147,7 @@ services:
     networks:
       default:
         ipv4_address: 192.16.0.79
+    restart: unless-stopped
 
   logstash-shipper:
     build: logstash-shipper/
@@ -154,18 +159,20 @@ services:
     networks:
       default:
         ipv4_address: 192.16.0.30
+    restart: unless-stopped
 
   logstash-indexer:
     build: logstash-indexer/
     container_name: logstash-indexer
     command: -f /etc/logstash/conf.d/
+    restart: unless-stopped
 
   kibana:
     build: kibana/
     container_name: kibana
     ports:
       - "5601:5601"
-
+    restart: unless-stopped
 
 networks:
   default:
