@@ -1,8 +1,9 @@
-# ELK v2.4
-Docker logging stack: 
- - ElasticSearch Cluster (3x data nodes)
- - ElasticSearch Ingester node (used by Logstash indexer)
- - ElasticSearch Coordinator node (used by Kibana)
+# Log transport and aggregation at scale for Docker containers
+
+The logging stack: 
+ - ElasticSearch Cluster (x3 data nodes)
+ - ElasticSearch Ingester (used by Logstash indexer)
+ - ElasticSearch Coordinator (used by Kibana)
  - Logstash Indexer
  - Redis Broker
  - Logstash Shipper
