@@ -14,4 +14,4 @@ Flow:
 
 container -> docker gelf -> logstash shipper -> redis broker -> logstash indexer -> elasticsearch ingester -> elasticsearch data cluster -> elasticsearch coordinator -> kibana
 
-![Flow](https://raw.githubusercontent.com/stefanprodan/dockelk/master/screens/flow.png)
+![Flow](https://raw.githubusercontent.com/stefanprodan/dockelk/master/diagram/infrastructure.png)
