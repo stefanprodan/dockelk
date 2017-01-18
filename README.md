@@ -170,3 +170,52 @@ The coordinator node role acts as a router between Kibana and the Elasticsearch 
       default:
         ipv4_address: 192.16.0.22
 ```
+
+### Kibana
+
+The Kibana Docker image contains the yml config file where the Elasticseach coordinator node URL is specified and a startup script that waits for the Elasticseach cluster to be available.
+
+***kibana.yml***
+
+```
+elasticsearch.url: "http://192.16.0.22:9200"
+```
+
+***entrypoint.sh***
+
+```bash
+echo "Stalling for Elasticsearch"
+while true; do
+    nc -q 1 192.16.0.22 9200 2>/dev/null && break
+done
+
+echo "Starting Kibana"
+exec kibana
+```
+
+***Dockcerfile***
+
+```
+FROM kibana:4.6.2
+
+RUN apt-get update && apt-get install -y netcat bzip2
+
+COPY config /opt/kibana/config
+
+COPY entrypoint.sh /tmp/entrypoint.sh
+RUN chmod +x /tmp/entrypoint.sh
+
+CMD ["/tmp/entrypoint.sh"]
+```
+
+***Service definition***
+
+```yml
+  kibana:
+    build: kibana/
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    restart: unless-stopped
+```
+
