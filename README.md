@@ -118,7 +118,7 @@ The Elasticseach data cluser is made out of 3 nodes, in production you should us
 ***Elasticseach ingest node***
 
 The ingest node acts as a reverse proxy between Logstash Indexer and the Elasticsearch data cluster, 
-when you scale out the cluster by adding more nodes you don't have to change the Logstash config.
+when you scale out the data cluster by adding more nodes you don't have to change the Logstash config.
 
 ```yml
   elasticsearch-ingester:
@@ -144,3 +144,29 @@ when you scale out the cluster by adding more nodes you don't have to change the
     restart: unless-stopped
 ```
 
+***Elasticseach coordinator node***
+
+The coordinator node role acts as a router between Kibana and the Elasticsearch data cluster, his main role is to handle the search reduce phase.
+
+```yml
+  elasticsearch-coordinator:
+    build: elasticsearch/
+    container_name: elasticsearch-coordinator 
+    command: >
+        elasticsearch 
+        --node.name="coordinator"
+        --cluster.name="elk" 
+        --network.host=0.0.0.0 
+        --discovery.zen.ping.multicast.enabled=false 
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" 
+        --node.master=false 
+        --node.data=false 
+        --node.ingest=false 
+        --bootstrap.mlockall=true 
+    ports:
+      - "9222:9200"
+      - "9322:9300"
+    networks:
+      default:
+        ipv4_address: 192.16.0.22
+```
