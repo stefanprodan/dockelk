@@ -114,3 +114,33 @@ The Elasticseach data cluser is made out of 3 nodes, in production you should us
         ipv4_address: 192.16.0.13
     restart: unless-stopped
 ```
+
+***Elasticseach ingest node***
+
+The ingest node acts as a reverse proxy between Logstash Indexer and the Elasticsearch data cluster, 
+when you scale out the cluster by adding more nodes you don't have to change the Logstash config.
+
+```yml
+  elasticsearch-ingester:
+    build: elasticsearch/
+    container_name: elasticsearch-ingester
+    command: >
+        elasticsearch 
+        --node.name="ingester" 
+        --cluster.name="elk" 
+        --network.host=0.0.0.0 
+        --discovery.zen.ping.multicast.enabled=false 
+        --discovery.zen.ping.unicast.hosts="192.16.0.11,192.16.0.12,192.16.0.13" 
+        --node.master=false 
+        --node.data=false 
+        --node.ingest=true 
+        --bootstrap.mlockall=true 
+    ports:
+      - "9221:9200"
+      - "9321:9300"
+    networks:
+      default:
+        ipv4_address: 192.16.0.21
+    restart: unless-stopped
+```
+
