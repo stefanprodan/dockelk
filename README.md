@@ -22,7 +22,27 @@ container -> docker gelf -> logstash shipper -> redis broker -> logstash indexer
  docker network create --subnet=192.16.0.0/24 elk
 ```
 
-### Elasticseach Data Cluster
+### Elasticseach Nodes
+
+All Elasticseach nodes use the same Docker image that containes the HQ and KOPF mangement plugins along with a health check command.
+
+```
+FROM elasticsearch:2.4.3
+
+RUN /usr/share/elasticsearch/bin/plugin install --batch royrusso/elasticsearch-HQ
+RUN /usr/share/elasticsearch/bin/plugin install --batch lmenezes/elasticsearch-kopf
+
+COPY docker-healthcheck /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-healthcheck
+
+HEALTHCHECK CMD ["docker-healthcheck"]
+
+COPY config /usr/share/elasticsearch/config
+```
+
+***Elasticseach data nodes***
+
+The Elasticseach data cluser is made out of 3 nodes, in production you should use a dedicated machine with at least 8GB RAM and 4 CPUs for each node.
 
 ```yml
   elasticsearch-node1:
