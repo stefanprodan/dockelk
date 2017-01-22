@@ -455,3 +455,6 @@ Note that GELF will set the `level` field to `6` when the input comes from `STDO
 Using the above filter will result in the following Kibana view:
 
 ![Kibana](https://raw.githubusercontent.com/stefanprodan/dockelk/master/diagram/nginx-logs-kibana.png)
+
+The Logstash Grok filter parses the NGINX access log and extracts the http version, http verb, request path, referrer, response http code, bytes, client IP, device, browser and OS details. 
+With these fields you can build in Kibana a versatile traffic analytics tool.
