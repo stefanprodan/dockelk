@@ -454,4 +454,4 @@ Note that GELF will set the `level` field to `6` when the input comes from `STDO
 
 Using the above filter will result in the following Kibana view:
 
-![Kibana](https://raw.githubusercontent.com/stefanprodan/dockelk/master/diagram/nginx-kibana.png)
+![Kibana](https://raw.githubusercontent.com/stefanprodan/dockelk/master/diagram/nginx-logs-kibana.png)
