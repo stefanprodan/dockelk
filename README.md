@@ -5,7 +5,7 @@ The logging stack:
  - ElasticSearch Ingester (used by Logstash indexer)
  - ElasticSearch Coordinator (used by Kibana)
  - Logstash Indexer 
- - Redis Broker (used by Logstash Indexers and ingester)
+ - Redis Broker (used by Logstash shipper and indexer)
  - Logstash Shipper (used by Docker engine)
  - Kibana
  - Docker GELF driver
@@ -35,7 +35,7 @@ curl http://localhost/404
 
 ### Network setup
 
-Create a dedicated Docker network so each container can have a fix IP assigned inside the compose file.
+I've create a dedicated Docker network so each container can have a fix IP.
 
 ```
  docker network create --subnet=192.16.0.0/24 elk
@@ -46,7 +46,7 @@ The containers can be started with `--net=host` to bind directly to the host net
 
 ### Elasticseach Nodes
 
-All Elasticseach nodes use the same Docker image that contains the HQ and KOPF management plugins along with a health check command.
+All Elasticseach nodes are using the same Docker image that contains the HQ and KOPF management plugins along with a health check command.
 
 ***Dockerfile***
 
@@ -244,14 +244,14 @@ CMD ["/tmp/entrypoint.sh"]
     restart: unless-stopped
 ```
 
-### Redis
+### Redis Broker
 
 The Redis Broker acts as a buffer between the Logstash shippers nodes and the Logstash indexer. 
 The more memory you give to this node the longer you can take offline the Logstash indexer and the Elasticseach cluster for upgrade/maintenance work. 
 Shutdown the Logstash indexer and monitor Redis memory usage to determine how log does it take for the memory to fill up. Once the memory fills up Redis will OOM and restart. 
 You can use Redis CLI and run `LLEN logstash` to determine how many logs your current setup holds. 
 
-I've disabled Redis disk persistance to max out the write throughput:
+I've disabled Redis disk persistance to max out the insert speed:
 
 ***redis.conf***
 
