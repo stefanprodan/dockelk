@@ -22,6 +22,8 @@ container -> docker gelf -> logstash shipper -> redis broker -> logstash indexer
  docker network create --subnet=192.16.0.0/24 elk
 ```
 
+In production you should use an internal DNS server and use domain names instead of fix IP addresses. Each service should reside on a dedicated host. The containers can be started with `--net=host` to bind directly to the host network to avoiding Docker bridge overhead.
+
 ### Elasticseach Nodes
 
 All Elasticseach nodes use the same Docker image that containes the HQ and KOPF mangement plugins along with a health check command.
