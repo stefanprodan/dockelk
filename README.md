@@ -451,3 +451,7 @@ filter {
 ``` 
 
 Note that GELF will set the `level` field to `6` when the input comes from `STDOUT` and `3` when it's `STDERR` so you can write different filers based on that. 
+
+Using the above filter will result in the following Kibana view:
+
+![Kibana](https://raw.githubusercontent.com/stefanprodan/dockelk/master/diagram/nginx-kibana.png)
