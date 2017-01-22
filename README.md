@@ -23,6 +23,8 @@ $ docker-compose logs -f kibana
 # generate NGINX logs
 curl http://localhost
 curl http://localhost/404
+
+# open Kibana in browser at http://localhost:5601
 ```
 
 ### Log transport diagram
