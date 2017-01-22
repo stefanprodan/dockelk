@@ -361,3 +361,93 @@ COPY config /etc/logstash/conf.d
         ipv4_address: 192.16.0.30
     restart: unless-stopped
 ```
+
+### Collect NGINX logs
+
+I'm going to use a NGINX container to showcase the logs collection. First you need to forward the NGINX logs to STDOUT and STDERR for Docker GELF to capture them.
+
+***Dockerfile***
+
+```
+FROM nginx:latest
+
+# forward nginx logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/nginx/access.log
+RUN ln -sf /dev/stderr /var/log/nginx/error.log
+```
+
+Next you need to run NGINX container with the Docker GELF log driver like so:
+
+```yml
+  nginx:
+    build: nginx/
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://192.16.0.30:12201"
+        tag: "nginx"
+```
+
+In production you will probably don't want to specify the GELF address option on each service. 
+If you expose the Logstash Shipper UDP port on the host you can set the address at the Docker engine level, so all your containers will use GELF as the default logging driver. 
+
+***Docker Engine GELF config***
+
+```bash
+$ dockerd \
+         --log-driver=gelf \
+         --log-opt gelf-address=udp://localhost:12201 
+```
+
+You can use the GELF `tag` option to write custom Loggstash filers for each service type. Here is an example of how you can target the NGINX logs inside the Logstash Shipper config:
+
+```js
+filter {
+  if [tag] == "nginx" {
+    # nginx access log 
+    if [level] == 6 {
+      grok {
+        match => [ "message" , "%{COMBINEDAPACHELOG}+%{GREEDYDATA:extra_fields}"]
+        overwrite => [ "message" ]
+      } 
+
+      date {
+        match => [ "timestamp" , "dd/MMM/YYYY:HH:mm:ss Z" ]
+        remove_field => [ "timestamp" ]
+      }
+      
+      useragent {
+        source => "agent"
+      }
+
+      mutate {
+        convert => { "response" =>"integer" }
+        convert => { "bytes" =>"integer" }
+        convert => { "responsetime" =>"float" }
+        rename => { "name" => "browser_name" }
+        rename => { "major" => "browser_major" }
+        rename => { "minor" => "browser_minor" }
+      }
+    }
+    # nginx error log 
+    if [level] == 3 {
+      grok {
+        match => [ "message" , "(?<timestamp>%{YEAR}[./-]%{MONTHNUM}[./-]%{MONTHDAY}[- ]%{TIME}) \[%{LOGLEVEL:severity}\] %{POSINT:pid}#%{NUMBER}: %{GREEDYDATA:errormessage}(?:, client: (?<client>%{IP}|%{HOSTNAME}))(?:, server: %{IPORHOST:server})(?:, request: %{QS:request})?(?:, upstream: \"%{URI:upstream}\")?(?:, host: %{QS:host})?(?:, referrer: \"%{URI:referrer}\")"]
+        overwrite => [ "message" ]
+      } 
+
+      date {
+        match => [ "timestamp" , "YYYY/MM/dd HH:mm:ss" ]
+        remove_field => [ "timestamp" ]
+      }
+    }
+  }
+}
+``` 
+
+Note that GELF will set the `level` field to `6` when the input comes from `STDOUT` and `3` when it's `STDERR`, so you can write different filers. 
