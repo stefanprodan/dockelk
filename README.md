@@ -457,4 +457,7 @@ Using the above filter will result in the following Kibana view:
 ![Kibana](https://raw.githubusercontent.com/stefanprodan/dockelk/master/diagram/nginx-logs-kibana.png)
 
 The Logstash Grok filter parses the NGINX access log and extracts the http version, http verb, request path, referrer, response http code, bytes, client IP, device, browser and OS details. 
-With these fields you can build in Kibana a versatile traffic analytics tool.
+With these fields you can turn Kibana into a versatile traffic analytics tool. 
+
+The GELF driver adds the image name/id, container name/id and the Docker command used to start the container. 
+These fields could prove useful if you'll want to measure the impact of a new deployment based on logs trending.
