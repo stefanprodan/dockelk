@@ -10,15 +10,24 @@ The logging stack:
  - Kibana
  - Docker GELF driver
 
-Run the full stack along with a NGINX container for testing.
+Clone the repo and run the full stack along with a NGINX container for testing.
 
+```bash
+$ git clone https://github.com/stefanprodan/dockelk.git
+$ cd dockelk
+$ bash setup.sh
+
+# wait for Kibana to connect to the cluster
+$ docker-compose logs
+
+# generate logs by calling NGINX
+curl http://localhost
+curl http://localhost/404
 ```
-./setup.sh
-```
 
-Flow:
+### Log transport diagram
 
-container -> docker gelf -> logstash shipper -> redis broker -> logstash indexer -> elasticsearch ingester -> elasticsearch data cluster -> elasticsearch coordinator -> kibana
+***Flow***: container -> docker gelf -> logstash shipper -> redis broker -> logstash indexer -> elasticsearch ingester -> elasticsearch data cluster -> elasticsearch coordinator -> kibana
 
 ![Flow](https://raw.githubusercontent.com/stefanprodan/dockelk/master/diagram/infrastructure.png)
 
