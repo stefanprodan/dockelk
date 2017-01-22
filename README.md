@@ -18,11 +18,14 @@ container -> docker gelf -> logstash shipper -> redis broker -> logstash indexer
 
 ### Network setup
 
+Create a dedicated Docker network so each container can have a fix IP assigned inside the compose file.
+
 ```
  docker network create --subnet=192.16.0.0/24 elk
 ```
 
-In production you should use an internal DNS server and use domain names instead of fix IP addresses. Each service should reside on a dedicated host. The containers can be started with `--net=host` to bind directly to the host network to avoiding Docker bridge overhead.
+In production you should use an internal DNS server and use domain names instead of fix IP addresses. Each service should reside on a dedicated host. 
+The containers can be started with `--net=host` to bind directly to the host network to avoiding Docker bridge overhead.
 
 ### Elasticseach Nodes
 
@@ -221,3 +224,43 @@ CMD ["/tmp/entrypoint.sh"]
     restart: unless-stopped
 ```
 
+### Redis
+
+The Redis Broker acts as a buffer between the Logstash shippers nodes and the Logstash indexer. 
+The more memory you give to this node the longer you can take offline the Logstash indexer and the Elasticseach cluster for upgrade/maintenance work. 
+Shutdown the Logstash indexer and monitor Redis memory usage to determine how log does it take for the memory to fill up. Once the memory fills up Redis will OOM and restart. 
+You can use Redis CLI and run `LLEN logstash` to determine how many logs your current setup holds. 
+
+I've disabled Redis disk persistance to max out the write throughput:
+
+***redis.conf***
+
+```
+#save 900 1
+#save 300 10
+#save 60 10000
+
+appendonly no
+```
+
+***Dockcerfile***
+
+```
+FROM redis:3.2.6
+
+COPY config /usr/local/etc/redis
+```
+
+***Service definition***
+
+```yml
+  redis-broker:
+    build: redis-broker/
+    container_name: redis-broker
+    ports:
+      - "6379:6379"
+    networks:
+      default:
+        ipv4_address: 192.16.0.79
+    restart: unless-stopped
+```
