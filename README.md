@@ -4,11 +4,17 @@ The logging stack:
  - ElasticSearch Cluster (x3 data nodes)
  - ElasticSearch Ingester (used by Logstash indexer)
  - ElasticSearch Coordinator (used by Kibana)
- - Logstash Indexer
- - Redis Broker
- - Logstash Shipper
+ - Logstash Indexer 
+ - Redis Broker (used by Logstash Indexers and ingester)
+ - Logstash Shipper (used by Docker engine)
  - Kibana
  - Docker GELF driver
+
+Run the full stack along with a NGINX container for testing.
+
+```
+./setup.sh
+```
 
 Flow:
 
