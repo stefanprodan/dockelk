@@ -308,3 +308,56 @@ COPY config /etc/logstash/conf.d
     command: -f /etc/logstash/conf.d/
     restart: unless-stopped
 ```
+
+### Logstash Shipper
+
+The Logstash Shipper node listens on UDP and receives the containers logs from Docker engine via the GELF driver. 
+The incoming logs are proccesed using Logstash filers and pushed to the Redis Broker node.
+
+
+***logstash.config***
+
+```
+input {
+  gelf {
+    type => docker
+    port => 12201
+  }
+}
+
+# filters ...
+
+output {
+  redis {
+    host => "192.16.0.79"
+    port => 6379
+    data_type => "list"
+    key => "logstash"
+    codec => json
+  }
+}
+```
+
+***Dockerfile***
+
+```
+FROM logstash:2.4.0-1
+
+COPY config /etc/logstash/conf.d
+```
+
+***Service definition***
+
+```yml
+  logstash-shipper:
+    build: logstash-shipper/
+    container_name: logstash-shipper
+    command: -f /etc/logstash/conf.d/
+    ports:
+      - "12201:12201"
+      - "12201:12201/udp"
+    networks:
+      default:
+        ipv4_address: 192.16.0.30
+    restart: unless-stopped
+```
