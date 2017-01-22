@@ -404,7 +404,7 @@ $ dockerd \
          --log-opt gelf-address=udp://localhost:12201 
 ```
 
-You can use the GELF `tag` option to write custom Loggstash filers for each service type. Here is an example of how you can target the NGINX logs inside the Logstash Shipper config:
+You can use the GELF `tag` option to write custom Logstash filers for each service type. Here is an example of how you can target the NGINX logs inside the Logstash Shipper config:
 
 ```js
 filter {
@@ -450,4 +450,4 @@ filter {
 }
 ``` 
 
-Note that GELF will set the `level` field to `6` when the input comes from `STDOUT` and `3` when it's `STDERR`, so you can write different filers. 
+Note that GELF will set the `level` field to `6` when the input comes from `STDOUT` and `3` when it's `STDERR` so you can write different filers based on that. 
