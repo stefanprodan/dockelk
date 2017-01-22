@@ -18,9 +18,9 @@ $ cd dockelk
 $ bash setup.sh
 
 # wait for Kibana to connect to the cluster
-$ docker-compose logs
+$ docker-compose logs -f kibana
 
-# generate logs by calling NGINX
+# generate NGINX logs
 curl http://localhost
 curl http://localhost/404
 ```
@@ -44,7 +44,7 @@ The containers can be started with `--net=host` to bind directly to the host net
 
 ### Elasticseach Nodes
 
-All Elasticseach nodes use the same Docker image that containes the HQ and KOPF management plugins along with a health check command.
+All Elasticseach nodes use the same Docker image that contains the HQ and KOPF management plugins along with a health check command.
 
 ***Dockerfile***
 
@@ -64,7 +64,7 @@ COPY config /usr/share/elasticsearch/config
 
 ***Elasticseach data nodes***
 
-The Elasticseach data cluser is made out of 3 nodes, in production you should use a dedicated machine with at least 8GB RAM and 4 CPUs for each node.
+The Elasticseach data cluster is made out of 3 nodes. In production you should use a dedicated machine for each node and disable memory swapping.
 
 ```yml
   elasticsearch-node1:
@@ -195,7 +195,8 @@ The coordinator node acts as a router between Kibana and the Elasticsearch data 
 
 ### Kibana
 
-The Kibana Docker image contains the yml config file where the Elasticseach coordinator node URL is specified and a startup script that waits for the Elasticseach cluster to be available.
+The Kibana Docker image contains the yml config file where the Elasticseach coordinator node URL is specified and a 
+startup script that waits for the Elasticseach cluster to be available.
 
 ***kibana.yml***
 
@@ -328,7 +329,8 @@ COPY config /etc/logstash/conf.d
 
 The Logstash Shipper node listens on UDP and receives the containers logs from Docker engine via the GELF driver. 
 The incoming logs are proccesed using Logstash filers and pushed to the Redis Broker node. 
-You should deploy a Shipper node on each Docker host you want to collect logs from. In production you can expose the UDP port on the host and configure Docker engine GELF driver to use it.
+You should deploy a Shipper node on each Docker host you want to collect logs from. 
+In production you can expose the UDP port on the host and configure Docker engine GELF driver to use it.
 
 ***logstash.config***
 
@@ -408,7 +410,7 @@ Next you need to run NGINX container with the Docker GELF log driver like so:
         tag: "nginx"
 ```
 
-In production you will probably don't want to specify the GELF address option on each service. 
+In production you will probably don't want to specify the GELF address option for each service. 
 If you expose the Logstash Shipper UDP port on the host you can set the address at the Docker engine level, so all your containers will use GELF as the default logging driver. 
 
 ***Docker Engine GELF config***
