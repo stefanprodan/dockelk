@@ -29,7 +29,9 @@ The containers can be started with `--net=host` to bind directly to the host net
 
 ### Elasticseach Nodes
 
-All Elasticseach nodes use the same Docker image that containes the HQ and KOPF mangement plugins along with a health check command.
+All Elasticseach nodes use the same Docker image that containes the HQ and KOPF management plugins along with a health check command.
+
+***Dockerfile***
 
 ```
 FROM elasticsearch:2.4.3
@@ -151,7 +153,7 @@ when you scale out the data cluster by adding more nodes you don't have to chang
 
 ***Elasticseach coordinator node***
 
-The coordinator node role acts as a router between Kibana and the Elasticsearch data cluster, his main role is to handle the search reduce phase.
+The coordinator node acts as a router between Kibana and the Elasticsearch data cluster, his main role is to handle the search reduce phase.
 
 ```yml
   elasticsearch-coordinator:
@@ -198,7 +200,7 @@ echo "Starting Kibana"
 exec kibana
 ```
 
-***Dockcerfile***
+***Dockerfile***
 
 ```
 FROM kibana:4.6.2
@@ -243,7 +245,7 @@ I've disabled Redis disk persistance to max out the write throughput:
 appendonly no
 ```
 
-***Dockcerfile***
+***Dockerfile***
 
 ```
 FROM redis:3.2.6
@@ -262,5 +264,47 @@ COPY config /usr/local/etc/redis
     networks:
       default:
         ipv4_address: 192.16.0.79
+    restart: unless-stopped
+```
+
+### Logstash Indexer
+
+The Logstash Indexer node pulls the logs from the Redis broker and pushes them into the Elasticseach cluster via the Elasticseach Ingester node.
+
+***logstash.config***
+
+```
+input {
+  redis {
+    host => "192.16.0.79"
+	port => 6379
+    key => "logstash"
+    data_type => "list"
+    codec => json
+  }
+}
+
+output {
+	elasticsearch {
+		hosts => "192.16.0.21:9200"
+	}
+}
+```
+
+***Dockerfile***
+
+```
+FROM logstash:2.4.0-1
+
+COPY config /etc/logstash/conf.d
+```
+
+***Service definition***
+
+```yml
+  logstash-indexer:
+    build: logstash-indexer/
+    container_name: logstash-indexer
+    command: -f /etc/logstash/conf.d/
     restart: unless-stopped
 ```
