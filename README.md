@@ -312,8 +312,8 @@ COPY config /etc/logstash/conf.d
 ### Logstash Shipper
 
 The Logstash Shipper node listens on UDP and receives the containers logs from Docker engine via the GELF driver. 
-The incoming logs are proccesed using Logstash filers and pushed to the Redis Broker node.
-
+The incoming logs are proccesed using Logstash filers and pushed to the Redis Broker node. 
+You should deploy a Shipper node on each Docker host you want to collect logs from. In production you can expose the UDP port on the host and configure Docker engine GELF driver to use it.
 
 ***logstash.config***
 
